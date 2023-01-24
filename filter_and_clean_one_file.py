@@ -35,15 +35,15 @@ for entry in a_people:
                 is_educated = True
        
     if is_educated:
+        entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] = [item for item in entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] if (item != 'person') and (item != 'Person') and (item != 'agent') and (item != 'owl#Thing') and (not item.startswith('DUL.owl#')) and (not item.startswith('Q'))]
         a_people_uni.append(entry)
-
 
 
 
 # Write column headers
 with open('a_uni_people.csv', 'w') as csvfile:
-    csvfile.write('Title, Birthyear, Nationality, Occuption, Field, Alma mater,  University,  College,  Education, Known for, full typelabel, description\n')
-    fieldnames = ['title', 'ontology/birthYear', 'ontology/nationality_label', 'ontology/occupation_label', 'ontology/field_label', 'ontology/almaMater_label', 'ontology/university_label', 'ontology/college_label', 'ontology/education_label', 'ontology/knownFor_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label', '"http://purl.org/dc/elements/1.1/description"']
+    csvfile.write('Title, Birthyear, Nationality, Occuption, Field, Alma mater,  University,  College,  Education, Known for, filtered typelabel\n')
+    fieldnames = ['title', 'ontology/birthYear', 'ontology/nationality_label', 'ontology/occupation_label', 'ontology/field_label', 'ontology/almaMater_label', 'ontology/university_label', 'ontology/college_label', 'ontology/education_label', 'ontology/knownFor_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
 
     for person in a_people_uni:
