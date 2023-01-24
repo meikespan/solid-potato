@@ -1,4 +1,5 @@
 import json
+import csv
 
 
 # Load JSON list of dictionaries
@@ -6,7 +7,6 @@ with open('People/A_people.json') as file:
     a_people_all = json.load(file)
 
 
-a_people_all= []
 excluded =[]
 a_people = []
 a_people_uni = []
@@ -37,7 +37,15 @@ for entry in a_people:
     if is_educated:
         a_people_uni.append(entry)
 
-print(len(a_people_all))
-print(len(excluded))
-print(len(a_people))
-print(len(a_people_uni))
+
+
+
+# Write column headers
+with open('a_uni_people.csv', 'w') as csvfile:
+    csvfile.write('Title, Birthyear, Nationality, Occuption, Field, Alma mater,  University,  College,  Education, Known for, full typelabel, description\n')
+    fieldnames = ['title', 'ontology/birthYear', 'ontology/nationality_label', 'ontology/occupation_label', 'ontology/field_label', 'ontology/almaMater_label', 'ontology/university_label', 'ontology/college_label', 'ontology/education_label', 'ontology/knownFor_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label', '"http://purl.org/dc/elements/1.1/description"']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
+
+    for person in a_people_uni:
+        writer.writerow(person)
+
