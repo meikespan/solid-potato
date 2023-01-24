@@ -48,13 +48,50 @@ for i in ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R
     people_uni_in_total += people_uni_in
     people_uni_total += people_uni
 
-print(excluded_no)
+    #thus, we are left with all non-fictional, non-criminal people that went to uni in our list of dictionaries 'people_uni_in_total'
+    occupation_keys = ['ontology/occupation_label','ontology/field_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label']
 
+    for entry in people_uni_in_total:
+        searcharea = []
+        for key in occupation_keys:
+            if key in entry:
+                if type(entry[key]) is list:
+                    searcharea.extend(entry[key])
+                else:
+                    searcharea.append(entry[key])
+        
+        is_athlete = False
+        is_academic = False
+        is_author = False
+        is_official = False
+
+        if 'athlete' in searcharea:
+            is_athlete = True
+        if 'scientist' in searcharea:
+            is_academic = True
+        if 'writer' in searcharea:
+            is_author = True
+        if 'office holder' in searcharea:
+            is_official = True
+
+        if is_athlete:
+            entry['occupational_group'] = 'athlete'
+        elif is_academic:
+            entry['occupational_group'] = 'academic'
+        elif is_author:
+            entry['occupational_group'] = 'author'
+        elif is_official:
+            entry['occupational_group'] = 'office holder'
+        else:
+            entry['occupational_group'] = 'other'
+
+print('excluded:', excluded_no)
+print('number included', len(people_uni_in_total))
 
 # Write column headers and export data into csv
 with open('uni_people.csv', 'w') as csvfile:
-    csvfile.write('Title, Birthyear, Nationality, Occuption, Field, Alma mater,  University,  College,  Education, Known for, Filtered typelabel\n')
-    fieldnames = ['title', 'ontology/birthYear', 'ontology/nationality_label', 'ontology/occupation_label', 'ontology/field_label', 'ontology/almaMater_label', 'ontology/university_label', 'ontology/college_label', 'ontology/education_label', 'ontology/knownFor_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label',]
+    csvfile.write('Title, Birthyear, Occupational group\n')
+    fieldnames = ['title', 'ontology/birthYear', 'occupational_group']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
 
     for person in people_uni_in_total:
