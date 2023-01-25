@@ -1,4 +1,5 @@
 library(tidyverse)
+library(ggthemes)
 uni_people<-read_csv("uni_people.csv")
 
 profession_N <- uni_people |>
@@ -16,6 +17,8 @@ bargraph_occupation_uni_percentage=ggplot(data=profession_N)+
   geom_bar(stat = "summary", fun = "mean",fill="aquamarine4")
 
 print(bargraph_occupation_uni_percentage)
+
+
 
 
 
