@@ -11,6 +11,7 @@ bargraph_occupation_uni_percentage=ggplot(data=profession_N)+
   aes(x=`Occupational group`, y=percentage)+
   labs(title="Occupational percentages")+
   labs(y="Percentage", x="Occupational group")+
+  scale_y_continuous (labels = scales::label_percent())+
   theme_economist()+
   theme_light()+
   theme(panel.background = element_rect(fill = "snow", colour = "grey50"))+
