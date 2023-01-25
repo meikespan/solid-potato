@@ -24,7 +24,7 @@ label_mapping = {
     'athlete': ['athlet', 'coach', 'sport', 'ball'], 
     'academic': ['scienti', 'professor', 'economist', 'philosopher', 'science', 'intellectual', 'histor', 'linguist', 'chem', 'philos', 'astronomy', 'scholar', 'math', 'engineer', 'biolog'],
     'author/journalist': ['writer', 'journalist' ,'author', 'novel'],
-    'office_holder': ['office holder', 'president', 'chairman', 'executive', 'mayor', 'united nations'],
+    'office_holder': ['office holder', 'president', 'chairman', 'executive', 'mayor', 'united nations'], 
     'artist':['artist', 'musician', 'photographer', 'poet', 'design', 'singer', 'voice', 'dance', 'composer', 'animator', 'sculpt','cartoonist', 'paint', 'music'],
     'judiciary': ['lawyer', 'judge', 'court', 'legal', 'law', 'attorney'],
     'actor': ['actor', 'film', 'producer', 'presenter'],
