@@ -60,13 +60,26 @@ def extract_entry(entry, label):
         'Occupational_group': label
     }
 
-def check_labels(searcharea, labels):
+def check_labels(look_heres, labels):
     for label in labels:
-        for searchareum in searcharea:
-            if label in searchareum:
+        for look_here in look_heres:
+            if label in look_here:
                 return True
+            else:
+                return False
 
 athlete_labels = ['athlete', 'coach', 'sport']
+academic_labels = ['scientist', 'professor', 'historian','economist']
+writer_labels = ['writer', 'journalist' ,'author']
+official_labels = ['office holder']
+artist_labels = ['artist', 'musician', 'photographer', 'poet']
+legal_labels = ['lawyer', 'judge']
+actor_labels = ['actor']
+politician_labels = ['politician']
+religious_labels = ['bishop', 'pope']
+royal_labels = ['monarch', 'queen', 'king']
+medical_labels = ['physician', 'surgeon', 'nurse','med']
+business_labels = ['business', 'entrepreneur']
 
 #defining the labels in our original dictionary that might contain occupational info and storing this as individual list items to be checked
 occupation_keys = ['ontology/occupation_label','ontology/field_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label']
@@ -90,83 +103,43 @@ for entry in a_people:
     if check_labels(searcharea, athlete_labels):
         a_people_output.append(extract_entry(entry, 'athlete'))
     
-    # is_athlete =False
-    # if any('athlete' in searchareum or 'coach' in searchareum or 'sport' in searchareum for searchareum in searcharea):
-    #     is_athlete = True
-    # if is_athlete:
-    #     entry['occupational_group'] = 'athlete'
-
-
-    # is_academic = False   
-    # if any('scientist' in searchareum or 'professor' in searchareum or 'historian' in searchareum or 'economist' in searchareum for searchareum in searcharea):
-    #     is_academic = True
-    # if is_academic:
-    #     entry['occupational_group'] = 'academic'
-
-
-    # is_writer = False    
-    # if any('writer' in searchareum or 'journalist' in searchareum or 'author' in searchareum for searchareum in searcharea):
-    #     is_writer = True
-    # if is_writer:
-    #     entry['occupational_group'] = 'author/journalist'
-        
-
-    # is_official = False    
-    # if 'office holder' in searcharea:
-    #     is_official = True
-    # if is_official:
-    #     entry['occupational_group'] = 'office_holder'
-
-    # is_artist = False
-    # if any('artist' in searchareum or 'musician' in searchareum or 'photographer' in searchareum or 'poet' in searchareum for searchareum in searcharea):
-    #     is_artist = True
-    # if is_artist:
-    #     entry['occupational_group'] = 'artist'
-
-    # is_legal = False
-    # if any('lawyer' in searchareum or 'judge' in searchareum for searchareum in searcharea):
-    #     is_legal = True
-    # if is_legal:
-    #     entry['occupational_group'] = 'judiciary'
+    elif check_labels(searcharea, academic_labels):
+        a_people_output.append(extract_entry(entry, 'academic'))
     
-    # is_actor = False
-    # if any('actor' in searchareum for searchareum in searcharea):
-    #     is_actor = True
-    # if is_actor:
-    #     entry['occupational_group'] = 'actor'
+    elif check_labels(searcharea, writer_labels):
+        a_people_output.append(extract_entry(entry, 'author/journalist'))
 
-    # is_politician = False
-    # if any('politician' in searchareum for searchareum in searcharea):
-    #     is_politician = True
-    # if is_politician:
-    #     entry['occupational_group'] = 'politician'
+    elif check_labels(searcharea, official_labels):
+        a_people_output.append(extract_entry(entry, 'office_holder'))
     
-    # is_religious = False
-    # if any('bishop' in searchareum or 'pope' in searchareum for searchareum in searcharea):
-    #     is_religious = True
-    # if is_religious:
-    #     entry['occupational_group'] = 'religious_figure'
+    elif check_labels(searcharea, artist_labels):
+        a_people_output.append(extract_entry(entry, 'artist'))
 
-    # is_royal = False
-    # if 'monarch' in searcharea:
-    #     is_royal = True
-    # if is_royal:
-    #     entry['occupational_group'] = 'royalty'
+    elif check_labels(searcharea, legal_labels):
+        a_people_output.append(extract_entry(entry, 'judiciary'))
 
-    # is_medical = False
-    # if any('physician' in searchareum or 'surgeon' in searchareum or 'nurse' in searchareum or 'med' in searchareum for searchareum in searcharea):
-    #     is_medical = True
-    # if is_medical:
-    #     entry['occupational_group'] = 'medical'
+    elif check_labels(searcharea, actor_labels):
+        a_people_output.append(extract_entry(entry, 'actor'))
 
+    elif check_labels(searcharea, politician_labels):
+        a_people_output.append(extract_entry(entry, 'politician'))
 
-    # is_business = False
-    # if any(('business' in searchareum or 'entrepreneur' in searchareum) for searchareum in searcharea):
-    #     is_business = True
-    # if is_business:
-    #     entry['occupational_group'] = 'business_person'
+    elif check_labels(searcharea, religious_labels):
+        a_people_output.append(extract_entry(entry, 'religious_figure'))
+    
+    elif check_labels(searcharea, royal_labels):  
+        a_people_output.append(extract_entry(entry, 'royalty'))
 
+    elif check_labels(searcharea, medical_labels):  
+        a_people_output.append(extract_entry(entry, 'medical_field'))
 
+    elif check_labels(searcharea, business_labels):
+        a_people_output.append(extract_entry(entry, 'business_person'))
+
+    else:
+        a_people_output.append(extract_entry(entry, 'other'))
+    
+ 
  
 # Write column headers and export our data into a usable csv
 with open('a_people_output_try.csv', 'w') as csvfile:
