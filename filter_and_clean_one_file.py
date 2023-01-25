@@ -39,18 +39,11 @@ for entry in a_people_uni:
         a_people.append(entry)
 
 
-#fixing some problems in the data where sometimes the birthyear is a list with the first entry not being a likely year but the second is
-for entry in a_people:
-    if 'ontology/birthYear' in entry:
-        if type(entry['ontology/birthYear']) is list:
-            entry['ontology/birthYear'] = entry['ontology/birthYear'][1]
 
-
+#thus, we are left with all non-fictional, non-criminal people that went to uni in our list of dictionaries 'a_people'
 
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------
  #defining their occupational groups
-
-#thus, we are left with all non-fictional, non-criminal people that went to uni in our list of dictionaries 'a_people'
 
 #defining functions
 def extract_entry(entry, label):
@@ -65,25 +58,26 @@ def check_labels(look_heres, labels):
         for look_here in look_heres:
             if label in look_here:
                 return True
-            else:
-                return False
 
-athlete_labels = ['athlete', 'coach', 'sport']
-academic_labels = ['scientist', 'professor', 'historian','economist']
-writer_labels = ['writer', 'journalist' ,'author']
-official_labels = ['office holder']
-artist_labels = ['artist', 'musician', 'photographer', 'poet']
-legal_labels = ['lawyer', 'judge']
-actor_labels = ['actor']
-politician_labels = ['politician']
-religious_labels = ['bishop', 'pope']
-royal_labels = ['monarch', 'queen', 'king']
-medical_labels = ['physician', 'surgeon', 'nurse','med']
-business_labels = ['business', 'entrepreneur']
+#defining the labels for each occupation
+label_mapping = {
+    'athlete': ['athlet', 'coach', 'sport', 'ball'], 
+    'academic': ['scienti', 'professor', 'economist', 'philosopher', 'science', 'intellectual', 'histor', 'linguist', 'chem', 'philos', 'astronomy', 'scholar', 'math', 'engineer', 'biolog'],
+    'author/journalist': ['writer', 'journalist' ,'author', 'novel'],
+    'office_holder': ['office holder', 'president', 'chairman', 'executive', 'mayor', 'united nations'],
+    'artist':['artist', 'musician', 'photographer', 'poet', 'design', 'singer', 'voice', 'dance', 'composer', 'animator', 'sculpt','cartoonist', 'paint', 'music'],
+    'judiciary': ['lawyer', 'judge', 'court', 'legal', 'law', 'attorney'],
+    'actor': ['actor', 'film', 'producer', 'presenter'],
+    'politician':['politician', 'political', 'minist', 'parliament', 'mayor', 'polit', 'diplomat'],
+    'religious_figure' : ['bishop', 'pope', 'christian', 'rabbi', 'church', 'faith', 'buddhis'],
+    'royalty': ['monarch', 'queen', 'king', 'prince'],
+    'medical_field': ['physician', 'surgeon', 'nurse','med', 'neuro', 'surg', 'optometry', 'physical therapy', 'health'],
+    'business_person': ['business', 'entrepreneur', 'corpor', 'investor'],
+    'military':['military', 'officer', 'marines']
+}
 
 #defining the labels in our original dictionary that might contain occupational info and storing this as individual list items to be checked
 occupation_keys = ['ontology/occupation_label','ontology/field_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label']
-
 
 for entry in a_people:
     searcharea = []
@@ -94,55 +88,28 @@ for entry in a_people:
             elif entry[key] != '':
                 searcharea.append(entry[key])
     
-    searcharea = [searchareum.lower() for searchareum in searcharea if not searchareum[-1].isdigit()] #lowercasing our potential occupations and removing info of the form ___digit that are not informational in our data
+    searcharea = [searchareum.lower() for searchareum in searcharea if len(searchareum) >0 and not searchareum[-1].isdigit()] #lowercasing our potential occupations #and removing info of the form ___digit that are not informational in our data
+
+    #fixing some problems in the data where sometimes the birthyear is a list with the first entry not being a likely year but the second is
+    if 'ontology/birthYear' in entry:
+        if type(entry['ontology/birthYear']) is list:
+            entry['ontology/birthYear'] = entry['ontology/birthYear'][1]
+
     
-    # #setting our default value for the new column 'occupational_group'
-    # entry['occupational_group'] = 'other'
+    #doing our actual checks
+    has_occupation = False
+    for occupation, labels in label_mapping.items():
+        if check_labels(searcharea, labels):
+            a_people_output.append(extract_entry(entry, occupation))
+            has_occupation = True
 
-
-    if check_labels(searcharea, athlete_labels):
-        a_people_output.append(extract_entry(entry, 'athlete'))
-    
-    elif check_labels(searcharea, academic_labels):
-        a_people_output.append(extract_entry(entry, 'academic'))
-    
-    elif check_labels(searcharea, writer_labels):
-        a_people_output.append(extract_entry(entry, 'author/journalist'))
-
-    elif check_labels(searcharea, official_labels):
-        a_people_output.append(extract_entry(entry, 'office_holder'))
-    
-    elif check_labels(searcharea, artist_labels):
-        a_people_output.append(extract_entry(entry, 'artist'))
-
-    elif check_labels(searcharea, legal_labels):
-        a_people_output.append(extract_entry(entry, 'judiciary'))
-
-    elif check_labels(searcharea, actor_labels):
-        a_people_output.append(extract_entry(entry, 'actor'))
-
-    elif check_labels(searcharea, politician_labels):
-        a_people_output.append(extract_entry(entry, 'politician'))
-
-    elif check_labels(searcharea, religious_labels):
-        a_people_output.append(extract_entry(entry, 'religious_figure'))
-    
-    elif check_labels(searcharea, royal_labels):  
-        a_people_output.append(extract_entry(entry, 'royalty'))
-
-    elif check_labels(searcharea, medical_labels):  
-        a_people_output.append(extract_entry(entry, 'medical_field'))
-
-    elif check_labels(searcharea, business_labels):
-        a_people_output.append(extract_entry(entry, 'business_person'))
-
-    else:
+    if not has_occupation and len(searcharea) != 0:
         a_people_output.append(extract_entry(entry, 'other'))
     
  
  
 # Write column headers and export our data into a usable csv
-with open('a_people_output_try.csv', 'w') as csvfile:
+with open('a_people_output.csv', 'w') as csvfile:
     fieldnames = ['Title', 'Birthyear', 'Occupational_group']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
 
