@@ -37,6 +37,11 @@ for entry in a_people_uni:
     else:
         a_people.append(entry)
 
+
+
+#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ #defining their occupational groups
+
 #thus, we are left with all non-fictional, non-criminal people that went to uni in our list of dictionaries 'a_people'
 occupation_keys = ['ontology/occupation_label','ontology/field_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label']
 
@@ -48,34 +53,76 @@ for entry in a_people:
                 searcharea.extend(entry[key])
             else:
                 searcharea.append(entry[key])
-    
-    is_athlete = False
-    is_academic = False
-    is_author = False
-    is_official = False
+          
 
-    if 'athlete' in searcharea:
-        is_athlete = True
-    if 'scientist' in searcharea:
-        is_academic = True
-    if 'writer' in searcharea:
-        is_author = True
-    if 'office holder' in searcharea:
-        is_official = True
+        is_athlete = False
+        if 'athlete' in searcharea:
+            is_athlete = True
+        if is_athlete:
+            entry['occupational_group'] = 'athlete'
 
-    if is_athlete:
-        entry['occupational_group'] = 'athlete'
-    elif is_academic:
-        entry['occupational_group'] = 'academic'
-    elif is_author:
-        entry['occupational_group'] = 'author'
-    elif is_official:
-        entry['occupational_group'] = 'office holder'
-    else:
-        entry['occupational_group'] = 'other'
+
+        is_academic = False   
+        if 'scientist' in searcharea:
+            is_academic = True
+        if is_academic:
+            entry['occupational_group'] = 'academic'
+
+
+        is_author = False    
+        if 'writer' in searcharea:
+            is_author = True
+        if is_author:
+            entry['occupational_group'] = 'author'
+            
+
+        is_official = False    
+        if 'office holder' in searcharea:
+            is_official = True
+        if is_official:
+            entry['occupational_group'] = 'office_holder'
+
+        is_artist = False
+        if 'artist' in searcharea:
+            is_artist = True
+        if is_artist:
+            entry['occupational_group'] = 'artist'
+
+        is_legal = False
+        if 'lawyer' in searcharea:
+            is_legal = True
+        if is_legal:
+            entry['occupational_group'] = 'judiciary'
+        
+        is_actor = False
+        if 'actor' in searcharea:
+            is_actor = True
+        if is_actor:
+            entry['occupational_group'] = 'actor'
+
+        is_politician = False
+        if 'politician' in searcharea:
+            is_politician = True
+        if is_politician:
+            entry['occupational_group'] = 'politician'
+        
+        is_religious = False
+        if 'bishop' in searcharea:
+            is_religious = True
+        if is_religious:
+            entry['occupational_group'] = 'religious_figure'
+
+        is_royal = False
+        if 'monarch' in searcharea:
+            is_royal = True
+        if is_royal:
+            entry['occupational_group'] = 'royalty'
+
+        else:
+            entry['occupational_group'] = searcharea
 
 # Write column headers and export our data into a usable csv
-with open('a_uni_people_try.csv', 'w') as csvfile:
+with open('a_uni_people.csv', 'w') as csvfile:
     csvfile.write('Title, Birthyear, occupationgroup\n')
     fieldnames = ['title', 'ontology/birthYear', 'occupational_group']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
@@ -83,56 +130,5 @@ with open('a_uni_people_try.csv', 'w') as csvfile:
     for person in a_people:
         writer.writerow(person) 
 
-#-------------------------------------------------------------------------------------------------------------------------------------------------------------------
- #defining their occupational groups
-        
-# # our conditions for each occupation
 
-
-
-
-# # assigning to a group depending on our defined statements:
-
-    # is_artist = False
-    # is_legal = False
-    # is_actor = False
-    # is_politician = False
-    # is_religious = False
-    # is_royal = False
-
-# elif is_actor == True:
-#     occupational_group = 'actor'    
-# elif is_athlete == True:
-#     occupational_group = 'athlete'
-# elif is_author == True:
-#     occupational_group = 'author'
-# elif is_artist == True:
-#     occupational_group = 'artist'   
-# elif is_legal == True:
-#     occupational_group = 'judiciary'       
-# elif is_politician == True:
-#     occupational_group = 'politician'
-# elif is_religious == True:
-#     occupational_group = 'religious_figure'
-# elif is_royal == True:
-#     occupational_group = 'royal'   
-# else:
-#     occupational_group = 'other'  
-
-
-
-
-
-
-
-
-
-# # Write column headers and export our data into a usable csv
-# with open('a_uni_people.csv', 'w') as csvfile:
-#     csvfile.write('Title, Birthyear, Occupation, Field, filtered typelabel\n')
-#     fieldnames = ['title', 'ontology/birthYear', 'ontology/occupation_label', 'ontology/field_label', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label']
-#     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
-
-#     for person in a_people:
-#         writer.writerow(person)
 
