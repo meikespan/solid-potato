@@ -30,6 +30,8 @@ for i in ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R
         if is_educated:
             entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] = [item for item in entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] if (item != 'person') and (item != 'Person') and (item != 'agent') and (item != 'owl#Thing') and (not item.startswith('DUL.owl#')) and (not item.startswith('Q'))]
             people_uni.append(entry)
+        else:
+            excluded_no += 1
 
 
 
@@ -60,37 +62,82 @@ for i in ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R
                 else:
                     searcharea.append(entry[key])
         
-        is_athlete = False
-        is_academic = False
-        is_author = False
-        is_official = False
+       
 
+        is_athlete = False
         if 'athlete' in searcharea:
             is_athlete = True
-        if 'scientist' in searcharea:
-            is_academic = True
-        if 'writer' in searcharea:
-            is_author = True
-        if 'office holder' in searcharea:
-            is_official = True
-
         if is_athlete:
             entry['occupational_group'] = 'athlete'
-        elif is_academic:
-            entry['occupational_group'] = 'academic'
-        elif is_author:
-            entry['occupational_group'] = 'author'
-        elif is_official:
-            entry['occupational_group'] = 'office holder'
-        else:
-            entry['occupational_group'] = 'other'
 
-print('excluded:', excluded_no)
+
+        is_academic = False   
+        if 'scientist' in searcharea:
+            is_academic = True
+        if is_academic:
+            entry['occupational_group'] = 'academic'
+
+
+        is_author = False    
+        if 'writer' in searcharea:
+            is_author = True
+        if is_author:
+            entry['occupational_group'] = 'author'
+            
+
+        is_official = False    
+        if 'office holder' in searcharea:
+            is_official = True
+        if is_official:
+            entry['occupational_group'] = 'office_holder'
+
+        is_artist = False
+        if 'artist' in searcharea:
+            is_artist = True
+        if is_artist:
+            entry['occupational_group'] = 'artist'
+
+        is_legal = False
+        if 'lawyer' in searcharea:
+            is_legal = True
+        if is_legal:
+            entry['occupational_group'] = 'judiciary'
+        
+        is_actor = False
+        if 'actor' in searcharea:
+            is_actor = True
+        if is_actor:
+            entry['occupational_group'] = 'actor'
+
+        is_politician = False
+        if 'politician' in searcharea:
+            is_politician = True
+        if is_politician:
+            entry['occupational_group'] = 'politician'
+        
+        is_religious = False
+        if 'bishop' in searcharea:
+            is_religious = True
+        if is_religious:
+            entry['occupational_group'] = 'religious_figure'
+
+        is_royal = False
+        if 'monarch' in searcharea:
+            is_royal = True
+        if is_royal:
+            entry['occupational_group'] = 'royalty'
+
+        else:
+            entry['occupational_group'] = searcharea
+
+
+
+print('number excluded:', excluded_no)
 print('number included', len(people_uni_in_total))
 
 # Write column headers and export data into csv
 with open('uni_people.csv', 'w') as csvfile:
-    csvfile.write('Title, Birthyear, Occupational group\n')
+    csvfile.write('Title, BirthYear, OccupationalGroup\n')
     fieldnames = ['title', 'ontology/birthYear', 'occupational_group']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames, restval='', extrasaction='ignore')
 
