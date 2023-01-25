@@ -9,8 +9,8 @@ profession_N <- uni_people |>
 
 bargraph_occupation_uni_percentage=ggplot(data=profession_N)+
   aes(x=`Occupational group`, y=percentage)+
-  labs(title="Occupational percentages")+
-  labs(y="Percentage", x="Occupational group")+
+  labs(title="Percentage of college alumni per occupational group")+
+  labs(y="Percentage of college alumni", x="Occupational group")+
   scale_y_continuous (labels = scales::label_percent())+
   theme_economist()+
   theme_light()+
