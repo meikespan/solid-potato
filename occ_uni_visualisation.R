@@ -4,6 +4,7 @@ library(ggthemes)
 
 #reading in our data and transforming it into useful stuff - bar plot
 uni_people_data <- read_csv('people_output.csv') |>
+  mutate(Birthyear = as.numeric(Birthyear)) |>
   filter(Birthyear <= 1990 & Birthyear >= 1500, na.rm = TRUE) |>
   group_by(Occupational_group) |>
   summarise(n = n()) |>
@@ -11,16 +12,19 @@ uni_people_data <- read_csv('people_output.csv') |>
 
   total_uni <- sum(uni_people_data[, 'n'])
 
+
+
 #reading in our data and transforming it into useful stuff - area graph 
 people_data <- read_csv("people_output_for_area_graph.csv") |>
   mutate(Birthyear = as.numeric(Birthyear)) |>
+  filter(Birthyear <= 1990 & Birthyear >= 1500) |>  #filtering for our range of decades
   mutate(Decade = (Birthyear - (Birthyear %% 10)), na.rm=TRUE) |> #flooring each birth-year, leaving us with the decade
-  filter(Decade <= 1990 & Decade >= 1500) |> #filtering for our range of decades
   group_by(Occupational_group, Decade) |>
   summarise(number_of_people = n()) |> #counting the number of people per occupational group per decade
   group_by(Decade) |>
   mutate(proportion_people = number_of_people / sum(number_of_people)) # adding a column with the percentages
           #calculated by dividing the number of people per group per decade by the total people per decade
+
 
 #reordering the order of the occupational groups so 'other' appears on top of the stack
 reordered_data <- people_data |>
