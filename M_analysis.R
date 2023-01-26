@@ -3,13 +3,13 @@ library(ggthemes)
 
 
 uni_people_data <- read_csv('people_output.csv') |>
-  group_by(Occupational_group) |>
+  group_by(Occupational_group, Birthyear) |>
   summarise(n = n())
 
-total <- sum(uni_people_data[, 'n'])
+total_uni <- sum(uni_people_data[, 'n'])
 
 occupation_bar_plot <- ggplot(data = uni_people_data) +
-  aes(x= reorder(Occupational_group, n/total), y = n/total) +
+  aes(x=reorder(Occupational_group,n/total), y = n/total_uni) +
   geom_col(fill = "aquamarine4") +
   coord_flip() +
   scale_y_continuous(breaks = seq(0,1, by = .1), minor_breaks = seq(0,1, by = .01), labels = scales::label_percent(), limits=c(NA, .3)) +
@@ -24,8 +24,15 @@ occupation_bar_plot <- ggplot(data = uni_people_data) +
                                           size = 0.25,
                                           linetype = 1))
 
+occupation_line_plot <- ggplot(data = uni_people_data) +
+  aes(x=Birthyear, y = n/total_uni, color = Ocupational_group) +
+  geom_line()
+
+print(occupation_line_plot)
+
 
 ggsave('occupation_bar_plot.pdf', plot = occupation_bar_plot, scale = 1, width=7, height=5)
+
 
 
 
