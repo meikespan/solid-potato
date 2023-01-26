@@ -6,7 +6,8 @@ library(ggthemes)
 uni_people_data <- read_csv('people_output.csv') |>
   filter(Birthyear <= 1990 & Birthyear >= 1500, na.rm = TRUE) |>
   group_by(Occupational_group) |>
-  summarise(n = n())
+  summarise(n = n()) |>
+  mutate(highlight = c('1', '0', '0', '1', '0', '0', '0', '0', '0', '1', '0', '1', '1', '0'))
 
   total_uni <- sum(uni_people_data[, 'n'])
 
@@ -50,20 +51,22 @@ reordered_data <- people_data |>
 
 #plotting respective output into a bar plot
 occupation_bar_plot <- ggplot(data = uni_people_data) +
-  aes(x=reorder(Occupational_group,n/total_uni), y = n/total_uni) +
-  geom_col(fill = "#2171B5") +
+  aes(x=reorder(Occupational_group,n/total_uni), y = n/total_uni, fill = highlight) +
+  geom_col() +
   coord_flip() +
   scale_y_continuous(breaks = seq(0,1, by = .1), minor_breaks = seq(0,1, by = .01), labels = scales::label_percent(), limits=c(NA, .3)) +
   labs(y = 'Percentage of total college alumni', 
        x = 'Occupational group')  +
-  scale_fill_brewer() +
+  scale_fill_manual(values = c("0" = '#9ECAE1',
+                    "1" = '#2171B5'))+
   theme_igray()+
   theme(panel.grid.major.x = element_line(colour = "grey50",
                                           size = 0.25,
                                           linetype = 1),
         panel.grid.minor.x = element_line(colour = "grey80",
                                           size = 0.25,
-                                          linetype = 1))
+                                          linetype = 1),
+        legend.position = "none")
 
 
 ggsave('occupation_bar_plot.pdf', plot = occupation_bar_plot, scale = 1, width=7, height=5)

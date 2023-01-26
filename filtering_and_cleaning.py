@@ -102,7 +102,8 @@ for entry in people_uni_in_total:
     if 'ontology/birthYear' in entry:
         if type(entry['ontology/birthYear']) is list:
             entry['ontology/birthYear'] = entry['ontology/birthYear'][1]
-
+            
+    
     
     #doing our actual checks
     has_occupation = False
