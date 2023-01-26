@@ -29,7 +29,7 @@ reordered_data <- people_data |>
 #plotting respective output into a area graph
 (area_plot <- ggplot(data = reordered_data) +
   aes(x = Decade, y = proportion_people, fill = Occupational_group, width = 10) +
-  labs(y = "Percentage of college degrees", x = "Decade", fill = "Occupational group") +
+  labs(y = "Percentage of college alumni", x = "Decade", fill = "Occupational group") +
   scale_y_continuous(breaks = seq(0,1, by = .1), minor_breaks = seq(0,1, by = .05), labels = scales::label_percent()) +
   scale_x_continuous(breaks = seq(1500,2000, by = 50), minor_breaks = seq(1500,2000, by = 10))+
   geom_bar(stat = "identity") +
@@ -54,7 +54,7 @@ occupation_bar_plot <- ggplot(data = uni_people_data) +
   geom_col(fill = "#2171B5") +
   coord_flip() +
   scale_y_continuous(breaks = seq(0,1, by = .1), minor_breaks = seq(0,1, by = .01), labels = scales::label_percent(), limits=c(NA, .3)) +
-  labs(y = 'Percentage of total people with a degree', 
+  labs(y = 'Percentage of total college alumni', 
        x = 'Occupational group')  +
   scale_fill_brewer() +
   theme_igray()+
