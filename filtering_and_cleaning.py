@@ -61,7 +61,7 @@ for i in ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R
                 if 'university' in entry[key].lower() or 'college' in entry[key].lower():
                     is_educated = True
         if is_educated:
-            entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] = [item for item in entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] if (item != 'person') and (item != 'Person') and (item != 'agent') and (item != 'owl#Thing') and (not item.startswith('DUL.owl#')) and (not item.startswith('Q'))]
+            entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] = [item for item in entry['http://www.w3.org/1999/02/22-rdf-syntax-ns#type_label'] if (item != 'person') and (item != 'Person') and (item != 'agent') and (item != 'owl#Thing') and (not item.startswith('DUL.owl#')) and (not item.startswith('Q'))] #cleaning our label of unneeded items so we can use it later in the occupation search
             people_uni.append(entry)
         else:
             excluded_no += 1
@@ -81,6 +81,13 @@ for i in ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R
     people_uni_in_total += people_uni_in
 
 
+     #fixing some problems in the data where sometimes the birthyear is a list with the first entry not being a likely year but the second is
+    if 'ontology/birthYear' in entry:
+        if type(entry['ontology/birthYear']) is list:
+            entry['ontology/birthYear'] = entry['ontology/birthYear'][1]
+        
+
+
 #-------------------------------------------------------------------------------------------------------------------------------------------------------------------
  #defining their occupational groups
 
@@ -97,13 +104,7 @@ for entry in people_uni_in_total:
                 searcharea.append(entry[key])
     
     searcharea = [searchareum.lower() for searchareum in searcharea if len(searchareum) >0 and not searchareum[-1].isdigit()] #lowercasing our potential occupations #and removing info of the form ___digit that are not informational in our data
-
-    #fixing some problems in the data where sometimes the birthyear is a list with the first entry not being a likely year but the second is
-    if 'ontology/birthYear' in entry:
-        if type(entry['ontology/birthYear']) is list:
-            entry['ontology/birthYear'] = entry['ontology/birthYear'][1]
-            
-    
+ 
     
     #doing our actual checks
     has_occupation = False

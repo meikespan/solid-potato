@@ -1,5 +1,6 @@
 library(tidyverse)
 library(ggthemes)
+library(wesanderson)
 
 
 #reading in our data and transforming it into useful stuff - bar plot
@@ -38,7 +39,7 @@ reordered_data <- people_data |>
   scale_y_continuous(breaks = seq(0,1, by = .1), minor_breaks = seq(0,1, by = .05), labels = scales::label_percent()) +
   scale_x_continuous(breaks = seq(1500,2000, by = 50), minor_breaks = seq(1500,2000, by = 10))+
   geom_bar(stat = "identity") +
-  scale_fill_brewer() +
+  scale_fill_manual(values = c('#ADB17DFF', '#B1746FFF', '#5B8FA8FF', '#FFB547FF', '#725663FF','#800000FF' )) +
   theme_igray() +
   theme(panel.grid.major.x = element_line(colour = "grey50",
                                           size = 0.25,
@@ -61,8 +62,8 @@ occupation_bar_plot <- ggplot(data = uni_people_data) +
   scale_y_continuous(breaks = seq(0,1, by = .1), minor_breaks = seq(0,1, by = .01), labels = scales::label_percent(), limits=c(NA, .3)) +
   labs(y = 'Percentage of total college alumni', 
        x = 'Occupational group')  +
-  scale_fill_manual(values = c("0" = '#9ECAE1',
-                    "1" = '#2171B5'))+
+  scale_fill_manual(values = c("0" = '#B1746FFF',
+                    "1" = '#800000FF'))+
   theme_igray()+
   theme(panel.grid.major.x = element_line(colour = "grey50",
                                           size = 0.25,
